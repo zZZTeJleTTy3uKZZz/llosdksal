@@ -60,6 +60,11 @@ def send_external_registration(body):
     print("ЗАПРОС К API")
     print("=" * 60)
 
+    print("\n[2] URL:")
+    print(
+        f"    {os.getenv('EXTERNAL_BASE_URL', 'https://p.newpeople.pro/app')}/external/contact/register"
+    )
+
     print("\n[3] Заголовки:")
     print(f"    Authorization: Bearer {f'Bearer {os.getenv("EXTERNAL_HASH_TOKEN")}'}")
     print(f"    X-Timestamp: {str(timestamp)}")
