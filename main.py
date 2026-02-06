@@ -43,6 +43,7 @@ def send_external_registration(body):
 
     try:
         data = response.json()
+        print(f"data {data}")
     except ValueError:
         data = None
 
@@ -66,7 +67,7 @@ def send_external_registration(body):
     )
 
     print("\n[3] Заголовки:")
-    print(f"    Authorization: Bearer {f'Bearer {os.getenv("EXTERNAL_HASH_TOKEN")}'}")
+    print(f"    Authorization: Bearer {f'{os.getenv("EXTERNAL_HASH_TOKEN")}'}")
     print(f"    X-Timestamp: {str(timestamp)}")
     print(f"    X-Signature: {signature}")
     print("    Content-Type: application/json")
