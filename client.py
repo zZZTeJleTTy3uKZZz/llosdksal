@@ -40,13 +40,15 @@ class ApiClient:
         # Для отправки - с пробелами (как в примере ТЗ)
         body_json_for_send = json.dumps(body, ensure_ascii=False)
 
-        return timestamp, signature, body_json_for_send
+        return timestamp, signature, body_json_for_send, body_json_for_sign, payload
 
     def register_contact(
         self, body, use_invalid_token=False, use_invalid_signature=False
     ):
         """Отправляет запрос регистрации контакта."""
-        timestamp, signature, body_json = self.sign_request(body)
+        timestamp, signature, body_json, body_json_for_sign, payload = (
+            self.sign_request(body)
+        )
 
         token = "INVALID_TOKEN" if use_invalid_token else self.hash_token
 
@@ -62,16 +64,49 @@ class ApiClient:
 
         url = f"{self.base_url}/external/contact/register"
 
-        print(f"POST {url}")
-        print(
-            f"Headers: Authorization=Bearer {token[:20]}..., X-Timestamp={timestamp}, X-Signature={signature[:20]}..."
-        )
-        print(f"Body: {body_json}")
+        # Детальный вывод каждого шага
+        print("\n" + "=" * 60)
+        print("ЗАПРОС К API")
+        print("=" * 60)
+
+        print(f"\n[1] URL: {url}")
+        print(f"[2] Метод: POST")
+
+        print(f"\n[3] Заголовки:")
+        print(f"    Authorization: Bearer {token}")
+        print(f"    X-Timestamp: {timestamp}")
+        print(f"    X-Signature: {signature}")
+        print(f"    Content-Type: application/json")
+
+        print(f"\n[4] Тело запроса (отправляется):")
+        print(f"    {body_json}")
+
+        print(f"\n[5] Тело для подписи (JSON без пробелов):")
+        print(f"    {body_json_for_sign}")
+
+        print(f"\n[6] Payload для HMAC (timestamp.body):")
+        print(f"    {payload}")
+
+        print(f"\n[7] Secret Key:")
+        print(f"    {self.secret_key}")
+
+        print(f"\n[8] Результат HMAC-SHA256:")
+        print(f"    {signature}")
+
+        print("\n" + "-" * 60)
+        print("ОТПРАВКА ЗАПРОСА...")
+        print("-" * 60)
 
         response = requests.post(url, headers=headers, data=body_json)
 
-        print(f"Response: {response.status_code}")
-        print(f"Response body: {response.text}")
+        print(f"\n[9] Статус ответа: {response.status_code}")
+        print(f"\n[10] Заголовки ответа:")
+        for key, value in response.headers.items():
+            print(f"     {key}: {value}")
+
+        print(f"\n[11] Тело ответа:")
+        print(f"     {response.text}")
+        print("=" * 60 + "\n")
 
         try:
             data = response.json()
