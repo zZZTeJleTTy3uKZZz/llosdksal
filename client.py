@@ -95,7 +95,7 @@ class ApiClient:
             print(f"    Referer: {self.referer}")
 
         print(f"\n[4] Тело запроса (отправляется):")
-        print(f"    {body_json}")
+        print(f"    {body_json_for_sign}")
 
         print(f"\n[5] Тело для подписи (JSON без пробелов):")
         print(f"    {body_json_for_sign}")
@@ -113,7 +113,8 @@ class ApiClient:
         print("ОТПРАВКА ЗАПРОСА...")
         print("-" * 60)
 
-        response = requests.post(url, headers=headers, data=body_json)
+        # Отправляем именно то тело, которое подписывали (minified)
+        response = requests.post(url, headers=headers, data=body_json_for_sign)
 
         print(f"\n[9] Статус ответа: {response.status_code}")
         print(f"\n[10] Заголовки ответа:")

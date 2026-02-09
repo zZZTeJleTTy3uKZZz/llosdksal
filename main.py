@@ -14,7 +14,8 @@ import os
 # Формирование подписи HMAC SHA256
 def sign_request(body, secret_key):
     timestamp = int(time.time())
-    body_json = json.dumps(body, separators=(",", ":"))
+    # ensure_ascii=False для поддержки кириллицы, separators=(",", ":") для удаления пробелов
+    body_json = json.dumps(body, separators=(",", ":"), ensure_ascii=False)
     print(f"body json {body_json}")
     payload = f"{timestamp}.{body_json}"
 
@@ -22,12 +23,12 @@ def sign_request(body, secret_key):
         secret_key.encode("utf-8"), payload.encode("utf-8"), hashlib.sha256
     ).hexdigest()
 
-    return timestamp, signature
+    return timestamp, signature, body_json
 
 
 # Отправка в External Contact Registration API
 def send_external_registration(body):
-    timestamp, signature = sign_request(body, os.getenv("EXTERNAL_SECRET_KEY"))
+    timestamp, signature, body_signed = sign_request(body, os.getenv("EXTERNAL_SECRET_KEY"))
 
     response = requests.post(
         f"{
@@ -40,7 +41,7 @@ def send_external_registration(body):
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
         },
-        data=json.dumps(body),
+        data=body_signed,
     )
 
     try:
@@ -76,7 +77,7 @@ def send_external_registration(body):
     print("    User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0")
 
     print("\n[4] Тело запроса (отправляется):")
-    print(f"    {body}")
+    print(f"    {body_signed}")
 
     print("\n[5] Тело для подписи (JSON без пробелов):")
     print(f"    {json.dumps(body, separators=(',', ':'))}")
