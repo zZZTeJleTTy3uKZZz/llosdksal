@@ -14,10 +14,6 @@ class ApiClient:
     def __init__(self):
         self.hash_token = os.getenv("EXTERNAL_HASH_TOKEN")
         self.secret_key = os.getenv("EXTERNAL_SECRET_KEY")
-        # Читаем настройки домена (если есть)
-        self.origin = os.getenv("EXTERNAL_ORIGIN")
-        self.referer = os.getenv("EXTERNAL_REFERER")
-
         self.base_url = os.getenv(
             "EXTERNAL_BASE_URL", "https://p.newpeople.pro/api"
         ).rstrip("/")
@@ -67,12 +63,6 @@ class ApiClient:
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
         }
 
-        # Если задан домен в .env - добавляем заголовки
-        if self.origin:
-            headers["Origin"] = self.origin
-        if self.referer:
-            headers["Referer"] = self.referer
-
         url = f"{self.base_url}/external/contact/register"
 
         # Детальный вывод каждого шага
@@ -89,10 +79,6 @@ class ApiClient:
         print(f"    X-Signature: {signature[:20]}...")
         print(f"    Content-Type: application/json")
         print(f"    User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0")
-        if self.origin:
-            print(f"    Origin: {self.origin}")
-        if self.referer:
-            print(f"    Referer: {self.referer}")
 
         print(f"\n[4] Тело запроса (отправляется):")
         print(f"    {body_json_for_sign}")

@@ -80,7 +80,7 @@ def send_external_registration(body):
     print(f"    {body_signed}")
 
     print("\n[5] Тело для подписи (JSON без пробелов):")
-    print(f"    {json.dumps(body, separators=(',', ':'))}")
+    print(f"    {json.dumps(body, separators=(',', ':'), ensure_ascii=False)}")
 
     print("\n[8] Результат HMAC-SHA256:")
     print(f"    {signature}")
