@@ -31,7 +31,7 @@ def send_external_registration(body):
 
     response = requests.post(
         f"{
-            os.getenv('EXTERNAL_BASE_URL', 'https://p.newpeople.pro/app')
+            os.getenv('EXTERNAL_BASE_URL', 'https://p.newpeople.pro/api')
         }/external/contact/register",
         headers={
             "Authorization": f"Bearer {os.getenv('EXTERNAL_HASH_TOKEN')}",
@@ -65,7 +65,7 @@ def send_external_registration(body):
 
     print("\n[2] URL:")
     print(
-        f"    {os.getenv('EXTERNAL_BASE_URL', 'https://p.newpeople.pro/app')}/external/contact/register"
+        f"    {os.getenv('EXTERNAL_BASE_URL', 'https://p.newpeople.pro/api')}/external/contact/register"
     )
 
     print("\n[3] Заголовки:")

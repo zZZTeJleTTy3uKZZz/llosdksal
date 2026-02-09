@@ -19,7 +19,7 @@ class ApiClient:
         self.referer = os.getenv("EXTERNAL_REFERER")
 
         self.base_url = os.getenv(
-            "EXTERNAL_BASE_URL", "https://p.newpeople.pro/app"
+            "EXTERNAL_BASE_URL", "https://p.newpeople.pro/api"
         ).rstrip("/")
 
         if not self.hash_token:
