@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import json
 import time
+import random
 
 import requests
 from dotenv import load_dotenv
@@ -37,6 +38,7 @@ def send_external_registration(body):
             "X-Timestamp": str(timestamp),
             "X-Signature": signature,
             "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
         },
         data=json.dumps(body),
     )
@@ -71,6 +73,7 @@ def send_external_registration(body):
     print(f"    X-Timestamp: {str(timestamp)}")
     print(f"    X-Signature: {signature}")
     print("    Content-Type: application/json")
+    print("    User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0")
 
     print("\n[4] Тело запроса (отправляется):")
     print(f"    {body}")
@@ -96,7 +99,9 @@ def send_external_registration(body):
 
 # ===== Пример использования =====
 def main():
-    body = {"phone": "+79001234567", "os_consent": True, "first_name": "Ivan"}
+    random_part = random.randint(1000000, 9999999)
+    phone = f"+7900{random_part}"
+    body = {"phone": phone, "os_consent": True, "first_name": "Ivan"}
 
     result = send_external_registration(body)
 
