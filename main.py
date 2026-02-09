@@ -102,7 +102,7 @@ def send_external_registration(body):
 def main():
     random_part = random.randint(1000000, 9999999)
     phone = f"+7900{random_part}"
-    body = {"phone": phone, "os_consent": True, "first_name": "Ivan"}
+    body = {"phone": phone, "os_consent": True, "first_name": "Иван", "last_name": "Иванов"}
 
     result = send_external_registration(body)
 

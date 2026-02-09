@@ -13,8 +13,8 @@ def valid_payload():
     return {
         "phone": f"+7900{random_part}",
         "os_consent": True,
-        "first_name": "TestUser",
-        "last_name": "Testov",
+        "first_name": "Тест",
+        "last_name": "Тестов",
         "email": f"test{random_part}@example.com",
         "comment": "Auto-test pytest"
     }
@@ -39,7 +39,8 @@ def test_02_validation_error_no_phone(client):
     """
     payload = {
         "os_consent": True,
-        "first_name": "NoPhone"
+        "first_name": "БезТелефона",
+        "last_name": "Ошибка"
     }
     response = client.register_contact(payload)
     assert response["status_code"] == 400, f"Expected 400, got {response['status_code']}"
@@ -52,7 +53,8 @@ def test_03_validation_error_no_consent(client):
     payload = {
         "phone": "+79001112233",
         "os_consent": False,
-        "first_name": "NoConsent"
+        "first_name": "БезСогласия",
+        "last_name": "Ошибка"
     }
     response = client.register_contact(payload)
     assert response["status_code"] == 400, f"Expected 400, got {response['status_code']}"
